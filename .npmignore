@@ -1,4 +1,4 @@
 node_modules
 *.log
-lib
+src
 package-lock.json
