@@ -2,3 +2,4 @@ node_modules
 *.log
 lib
 package-lock.json
+/.idea
