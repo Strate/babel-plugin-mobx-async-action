@@ -3,6 +3,8 @@
     "plugins":["decorators", "classProperties"]
   },
   "plugins": [
-    "../../../src"
+    ["../../../src", {
+      "mobx-package": "mobx-custom"
+    }]
   ]
 }

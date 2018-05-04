@@ -3,6 +3,6 @@
     "plugins":["decorators", "classProperties"]
   },
   "plugins": [
-    ["../../../src"]
+    "../../../src"
   ]
 }

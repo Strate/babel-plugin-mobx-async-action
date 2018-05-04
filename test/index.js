@@ -20,6 +20,9 @@ describe('', () => {
           path.join(fixtureDir, 'expected.js')
       ).toString();
 
+      // console.log(path.join(fixtureDir, 'expected.js'))
+      // console.log(actual)
+
       assert.equal(trim(actual), trim(expected));
     });
   });

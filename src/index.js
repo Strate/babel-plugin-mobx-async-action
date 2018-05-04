@@ -1,3 +1,5 @@
+import remapAsyncToGenerator from "babel-helper-remap-async-to-generator";
+
 export default function (babel) {
   const {types: t} = babel;
 
@@ -5,7 +7,10 @@ export default function (babel) {
    * t.isFunctionExpression() || t.isArrowFunctionExpression()
    */
   function isAnyFunctionExpression() {
-    return t.isFunctionExpression.apply(t, arguments) || t.isArrowFunctionExpression.apply(t, arguments);
+    return t.isFunctionExpression.apply(t, arguments) ||
+      t.isArrowFunctionExpression.apply(t, arguments) ||
+      t.isClassMethod.apply(t, arguments)
+      ;
   }
 
   function isAction(node, actionIdentifier, mobxNamespaceIdentifier) {
@@ -23,75 +28,36 @@ export default function (babel) {
       )
   }
 
-  function addImportFlowIfNotExists(path, mobxPackage) {
-    const root = path.findParent(parent => t.isProgram(parent))
-
-    for (const item of root.get('body')) {
-      const node = item.node
-      if (
-        t.isImportDeclaration(node) &&
-        t.isStringLiteral(node.source, {value: mobxPackage})
-      ) {
-        for (const specifier of node.specifiers) {
-          if (
-            t.isImportSpecifier(specifier) &&
-            t.isIdentifier(specifier.imported, {name: "flow"})
-          ) {
-            return specifier.local
-          }
-        }
-      }
-    }
-    // not found, add it
-    const id = root.scope.generateUidIdentifier("flow")
-    root.unshiftContainer('body', t.ImportDeclaration(
-      [
-        t.ImportSpecifier(
-          id,
-          t.Identifier("flow")
-        )
-      ],
-      t.StringLiteral(mobxPackage)
-    ))
-
-    return id
-  }
-
-  function convertToFlow(path, {actionIdentifier, mobxNamespaceIdentifier, mobxPackage}) {
+  function convertToFlow(path, state) {
     if (
       isAnyFunctionExpression(path.node) &&
       path.node.async &&
       t.isBlockStatement(path.get('body').node)
     ) {
-      const flowId = addImportFlowIfNotExists(path, mobxPackage)
-      path.get('body').replaceWith(
-        t.BlockStatement([
-          t.ReturnStatement(t.CallExpression(flowId, [
-            t.ArrowFunctionExpression([], path.get('body'), true)
-          ]))
-        ])
-      )
+      remapAsyncToGenerator(path, state.file, {
+        wrapAsync: state.addImport(state.mobxPackage, "flow")
+      });
     }
   }
 
   const traverseSibling = {
-    CallExpression(path) {
+    CallExpression(path, state) {
       const node = path.node;
       const actionIdentifier = this.actionIdentifier;
       const mobxNamespaceIdentifier = this.mobxNamespaceIdentifier;
       const mobxPackage = this.mobxPackage;
       if (isAction(node.callee, actionIdentifier, mobxNamespaceIdentifier)) {
         if (node.arguments.length === 1) {
-          convertToFlow(path.get('arguments.0'), {actionIdentifier, mobxNamespaceIdentifier, mobxPackage})
+          convertToFlow(path.get('arguments.0'), state)
           path.skip();
         } else if (node.arguments.length === 2) {
-          convertToFlow(path.get('arguments.1'), {actionIdentifier, mobxNamespaceIdentifier, mobxPackage})
+          convertToFlow(path.get('arguments.1'), state)
           path.skip();
         }
       }
     },
 
-    ["ClassMethod|ClassProperty"](path) {
+    ["ClassMethod|ClassProperty"](path, state) {
       const actionIdentifier = this.actionIdentifier;
       const mobxNamespaceIdentifier = this.mobxNamespaceIdentifier;
       const mobxPackage = this.mobxPackage;
@@ -124,13 +90,13 @@ export default function (babel) {
                   leftPath.get('property').node.name in explicitClasses[classDeclaration.node.id.name] &&
                   (rightPath.isArrowFunctionExpression() || rightPath.isFunctionExpression())
                 ) {
-                  convertToFlow(rightPath.get('body'), {actionIdentifier, mobxNamespaceIdentifier, mobxPackage})
+                  convertToFlow(rightPath, state)
                 }
               }
             }
           })
         } else {
-          convertToFlow(path.get('body'), {actionIdentifier, mobxNamespaceIdentifier, mobxPackage})
+          convertToFlow(path, state)
         }
         path.skip();
       } else if (path.node.decorators) {
@@ -140,10 +106,10 @@ export default function (babel) {
             (t.isCallExpression(expression) && isAction(expression.callee, actionIdentifier, mobxNamespaceIdentifier))
           ) {
             if (t.isClassMethod(path.node)) {
-              convertToFlow(path.get('body'), {actionIdentifier, mobxNamespaceIdentifier, mobxPackage})
+              convertToFlow(path, state)
               path.skip();
             } else if (t.isClassProperty(path.node)) {
-              convertToFlow(path.get('value'), {actionIdentifier, mobxNamespaceIdentifier, mobxPackage})
+              convertToFlow(path.get('value'), state)
               path.skip();
             }
           }
@@ -182,7 +148,7 @@ export default function (babel) {
             }
           }
         })
-        const context = {actionIdentifier, mobxNamespaceIdentifier, mobxPackage}
+        const context = {...state, actionIdentifier, mobxNamespaceIdentifier, mobxPackage, addImport: state.addImport}
         path.traverse(traverseSibling, context)
         const toTraverse = [];
         /**
