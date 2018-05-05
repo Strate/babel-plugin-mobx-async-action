@@ -1,7 +1,8 @@
 {
   "name": "babel-plugin-mobx-async-action",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "",
+  "license": "MIT",
   "repository": "Strate/babel-plugin-mobx-async-action",
   "author": "Strate <strate@yandex.ru>",
   "main": "lib/index.js",
