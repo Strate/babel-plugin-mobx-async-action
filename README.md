@@ -18,7 +18,7 @@ Converts all async actions to mobx's 4 `flow` utility call.
 import { action } from "mobx";
 
 action(async function doSome() {
-  const response = fetch("/api/list")
+  const response = await fetch("/api/list")
   this.items = await response.json();
 });
 ```
@@ -33,7 +33,7 @@ import { flow as _flow } from "mobx";
 
 action((() => {
   var _ref = _flow(function* () {
-    const response = fetch("/api/list");
+    const response = yield fetch("/api/list");
     this.items = yield response.json();
   });
 
