@@ -62,7 +62,7 @@ export default function (babel) {
       const mobxNamespaceIdentifier = this.mobxNamespaceIdentifier;
       const mobxPackage = this.mobxPackage;
       const explicitClasses = this.classes;
-      const classDeclaration = path.findParent(p => p.isClassDeclaration())
+      const classDeclaration = path.findParent(p => p.isClassDeclaration() || p.isClassExpression())
       // If there is an explicit classes with actions, handle them separately
       if (
         explicitClasses &&
