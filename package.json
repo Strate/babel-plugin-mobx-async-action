@@ -1,6 +1,6 @@
 {
   "name": "babel-plugin-mobx-async-action",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "",
   "repository": "Strate/babel-plugin-mobx-async-action",
   "author": "Strate <strate@yandex.ru>",
