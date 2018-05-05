@@ -35,6 +35,24 @@ class Class1 {
     tslib_1.__decorate([action], Class2.prototype, "method", null);
     return Class2;
   }
+
+  @action
+  method3() {
+    return _flow(function* () {
+      yield 1;
+      class Class2 {
+        method() {
+          return _flow(function* () {
+            yield 123;
+            yield 321;
+          })();
+        }
+      }
+
+      tslib_1.__decorate([action], Class2.prototype, "method", null);
+      return Class2;
+    })();
+  }
 }
 
 tslib_1.__decorate([mobx.action], Class1.prototype, "method", null);

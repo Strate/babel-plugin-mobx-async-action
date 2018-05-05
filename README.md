@@ -1,5 +1,8 @@
 # babel-plugin-mobx-async-action
 
+[![Build Status](https://travis-ci.com/Strate/babel-plugin-mobx-async-action.svg?branch=master)](https://travis-ci.com/Strate/babel-plugin-mobx-async-action)
+[![NPM](https://nodei.co/npm/babel-plugin-mobx-async-action.png)](https://nodei.co/npm/babel-plugin-mobx-async-action/)
+
 Converts all async actions to mobx's 4 `flow` utility call.
 
 * [Use other package](#toc-mobx-package)

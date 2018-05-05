@@ -35,7 +35,6 @@ class Class1 {
 
   @action
   async method3() {
-    await 1
     class Class2 {
       async method() {
         await 123

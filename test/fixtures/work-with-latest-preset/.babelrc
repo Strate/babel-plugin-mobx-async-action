@@ -1,0 +1,10 @@
+{
+  "plugins": [
+    "../../../src",
+    "transform-decorators-legacy"
+  ],
+  "presets": [
+    "es2015",
+    "stage-2"
+  ]
+}
