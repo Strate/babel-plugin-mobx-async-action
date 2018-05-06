@@ -67,15 +67,15 @@ import * as mobx from "mobx";
 ```
 import * as mobxAlias from "mobx";
 ```
+```
+import * as mobx from "my-mobx-alias"
+```
 For example, this cases are **not supported**:
 ```
 const mobx = require("mobx")
 ```
 ```
 const {action} = require("mobx")
-```
-```
-import * as mobx from "my-mobx-alias"
 ```
 ```
 import * as mobx from "mobx";
@@ -87,7 +87,7 @@ action(function() {});
 ## Installation
 
 ```sh
-$ npm install babel-plugin-mobx-deep-action
+$ npm install babel-plugin-mobx-async-action
 ```
 
 ## Usage
@@ -98,21 +98,21 @@ $ npm install babel-plugin-mobx-deep-action
 
 ```json
 {
-  "plugins": ["mobx-deep-action"]
+  "plugins": ["mobx-async-action"]
 }
 ```
 
 ### Via CLI
 
 ```sh
-$ babel --plugins mobx-deep-action script.js
+$ babel --plugins mobx-async-action script.js
 ```
 
 ### Via Node API
 
 ```javascript
 require("babel-core").transform("code", {
-  plugins: ["mobx-deep-action"]
+  plugins: ["mobx-async-action"]
 });
 ```
 
@@ -126,7 +126,7 @@ If you use wrapper for "mobx" package, you can pass it's name to plugin:
 ```json5
 {
   "plugins": [
-    ["mobx-deep-action", {
+    ["mobx-async-action", {
       "mobx-package": "mobx-custom"
     }]
   ]
