@@ -1,4 +1,5 @@
-import remapAsyncToGenerator from "babel-helper-remap-async-to-generator";
+import remapAsyncToGenerator from "@babel/helper-remap-async-to-generator";
+import { addNamed } from '@babel/helper-module-imports';
 
 export default function (babel) {
   const {types: t} = babel;
@@ -34,8 +35,8 @@ export default function (babel) {
       path.node.async &&
       t.isBlockStatement(path.get('body').node)
     ) {
-      remapAsyncToGenerator(path, state.file, {
-        wrapAsync: state.addImport(state.mobxPackage, "flow")
+      remapAsyncToGenerator(path, {
+        wrapAsync: addNamed(path, "flow", state.mobxPackage)
       });
     }
   }
@@ -148,7 +149,7 @@ export default function (babel) {
             }
           }
         })
-        const context = {...state, actionIdentifier, mobxNamespaceIdentifier, mobxPackage, addImport: state.addImport}
+        const context = {...state, actionIdentifier, mobxNamespaceIdentifier, mobxPackage}
         path.traverse(traverseSibling, context)
         const toTraverse = [];
         /**

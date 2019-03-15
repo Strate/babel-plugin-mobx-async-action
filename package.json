@@ -1,25 +1,41 @@
 {
   "name": "babel-plugin-mobx-async-action",
-  "version": "0.0.6",
+  "version": "7.0.0",
   "description": "",
   "license": "MIT",
   "repository": "Strate/babel-plugin-mobx-async-action",
   "author": "Strate <strate@yandex.ru>",
   "main": "lib/index.js",
   "dependencies": {
-    "babel-helper-remap-async-to-generator": "^6"
+    "@babel/helper-module-imports": "^7.0.0",
+    "@babel/helper-remap-async-to-generator": "^7.1.0"
   },
   "devDependencies": {
-    "babel-cli": "^6.4.5",
-    "babel-plugin-transform-decorators-legacy": "^1.3.4",
-    "babel-preset-es2015": "^6.3.13",
-    "babel-preset-stage-0": "^6.3.13",
+    "@babel/cli": "^7.0.0",
+    "@babel/core": "^7.0.0",
+    "@babel/plugin-proposal-class-properties": "^7.0.0",
+    "@babel/plugin-proposal-decorators": "^7.0.0",
+    "@babel/plugin-proposal-do-expressions": "^7.0.0",
+    "@babel/plugin-proposal-export-default-from": "^7.0.0",
+    "@babel/plugin-proposal-export-namespace-from": "^7.0.0",
+    "@babel/plugin-proposal-function-bind": "^7.0.0",
+    "@babel/plugin-proposal-function-sent": "^7.0.0",
+    "@babel/plugin-proposal-json-strings": "^7.0.0",
+    "@babel/plugin-proposal-logical-assignment-operators": "^7.0.0",
+    "@babel/plugin-proposal-nullish-coalescing-operator": "^7.0.0",
+    "@babel/plugin-proposal-numeric-separator": "^7.0.0",
+    "@babel/plugin-proposal-optional-chaining": "^7.0.0",
+    "@babel/plugin-proposal-pipeline-operator": "^7.0.0",
+    "@babel/plugin-proposal-throw-expressions": "^7.0.0",
+    "@babel/plugin-syntax-dynamic-import": "^7.0.0",
+    "@babel/plugin-syntax-import-meta": "^7.0.0",
+    "@babel/preset-env": "^7.0.0",
     "mocha": "^2.2.5"
   },
   "scripts": {
     "clean": "rm -rf lib",
     "build": "babel src -d lib",
-    "test": "mocha --compilers js:babel-register",
+    "test": "mocha --compilers js:@babel/register",
     "test:watch": "npm run test -- --watch",
     "prepublish": "npm run clean && npm run build"
   },

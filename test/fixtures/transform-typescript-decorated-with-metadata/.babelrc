@@ -1,6 +1,9 @@
 {
-  "parserOpts":{
-    "plugins":["decorators", "classProperties"]
+  "parserOpts": {
+    "plugins": [
+      "decorators",
+      "classProperties"
+    ]
   },
   "plugins": [
     "../../../src"
