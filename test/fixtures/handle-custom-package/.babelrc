@@ -1,10 +1,16 @@
 {
-  "parserOpts":{
-    "plugins":["decorators", "classProperties"]
+  "parserOpts": {
+    "plugins": [
+      "decorators",
+      "classProperties"
+    ]
   },
   "plugins": [
-    ["../../../src", {
-      "mobx-package": "mobx-custom"
-    }]
+    [
+      "../../../src",
+      {
+        "mobx-package": "mobx-custom"
+      }
+    ]
   ]
 }
